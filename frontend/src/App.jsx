@@ -4,6 +4,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
+import Workouts from './components/Workouts';
+import History from './components/History';
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -37,6 +39,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/workouts" element={<Workouts />} />
+          <Route path="/history" element={<History />} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>
