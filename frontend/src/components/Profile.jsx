@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import BottomNavigation from './BottomNavigation';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const Profile = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -27,14 +25,14 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/profile`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
       if (data.avatar) {
-        setPreview(`${API_URL}${data.avatar}`);
+        setPreview(`${import.meta.env.VITE_API_URL}${data.avatar}`);
       }
       setJoinDate(data.joinDate);
     } catch (error) {
@@ -45,7 +43,7 @@ const Profile = () => {
   const fetchWorkoutStats = async () => {
     try {
       // Fetch completed workouts
-      const response = await fetch(`${API_URL}/api/workouts/${username}/completed`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/workouts/${username}/completed`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -96,16 +94,16 @@ const Profile = () => {
     }
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!image) return;
 
     setLoading(true);
@@ -113,7 +111,7 @@ const Profile = () => {
     formData.append('avatar', image);
 
     try {
-      const response = await fetch(`${API_URL}/api/profile/upload-avatar`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile/upload-avatar`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -123,7 +121,7 @@ const Profile = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setPreview(`${API_URL}${data.avatar}`);
+        setPreview(`${import.meta.env.VITE_API_URL}${data.avatar}`);
         setImage(null);
       }
     } catch (error) {
@@ -135,7 +133,7 @@ const Profile = () => {
 
   const handleDeleteWorkout = async (workoutId) => {
     try {
-      const response = await fetch(`${API_URL}/api/workouts/${workoutId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/workouts/${workoutId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -158,33 +156,29 @@ const Profile = () => {
           {/* User Info Card */}
           <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
             <div className="flex flex-col items-center text-center">
-              <div className="flex flex-col items-center mb-6">
-                <div className="relative">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                    {preview ? (
-                      <img src={preview} alt="Profile Preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <FaUser className="text-4xl sm:text-5xl text-gray-400 dark:text-gray-500" />
-                    )}
-                  </div>
-                  <label 
-                    htmlFor="profile-image-upload" 
-                    className="absolute -bottom-2 -right-2 bg-blue-500 dark:bg-blue-600 text-white p-2.5 rounded-full hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors shadow-lg cursor-pointer"
-                    aria-label="Change profile picture"
-                  >
-                    <FaCamera className="text-sm sm:text-base" />
-                    <input
-                      id="profile-image-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImageChange}
-                    />
-                  </label>
+              <div className="relative">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 bg-blue-500 dark:bg-blue-600 rounded-full flex items-center justify-center overflow-hidden">
+                  {preview ? (
+                    <img src={preview} alt="Profile Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <FaUser className="text-4xl sm:text-5xl text-white" />
+                  )}
                 </div>
-                <h1 className="text-xl sm:text-2xl font-bold mt-4 text-gray-800 dark:text-white">{username}</h1>
+                <label 
+                  htmlFor="image-upload" 
+                  className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-full p-2 sm:p-3 cursor-pointer transition-colors duration-200 shadow-lg"
+                >
+                  <input
+                    type="file"
+                    id="image-upload"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                  <FaCamera className="text-white text-sm sm:text-base" />
+                </label>
               </div>
-
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-4 mb-2">{username}</h1>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Member since {joinDate}</p>
             </div>
 
@@ -214,14 +208,6 @@ const Profile = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <button
-                type="submit"
-                className="bg-blue-500 dark:bg-blue-600 text-white p-2 rounded-full hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors shadow-lg"
-              >
-                Upload
-              </button>
-            </form>
           </div>
 
           {/* Recent Activity */}
