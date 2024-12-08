@@ -178,6 +178,15 @@ const Profile = () => {
                   <FaCamera className="text-white text-sm sm:text-base" />
                 </label>
               </div>
+              {image && (
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className={`mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-lg transition-colors duration-200 flex items-center justify-center ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {loading ? 'Saving...' : 'Save Profile Picture'}
+                </button>
+              )}
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-4 mb-2">{username}</h1>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Member since {joinDate}</p>
             </div>

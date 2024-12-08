@@ -46,9 +46,33 @@ export const exercises = {
       { name: "Walking Lunges", reps: 12, sets: 3, perSide: true },
       { name: "Single-Leg Calf Raises", reps: 15, sets: 3, perSide: true },
     ],
-    // ... add more exercises for other body parts and fitness levels
+    back: [
+      { name: "Superman with Arm/Leg Raise", duration: "30 seconds", sets: 3 },
+      { name: "Resistance Band Rows", reps: 15, sets: 3 },
+      { name: "Reverse Snow Angels", reps: 12, sets: 3 },
+    ],
+    chest: [
+      { name: "Regular Push-ups", reps: 12, sets: 3 },
+      { name: "Incline Push-ups", reps: 12, sets: 3 },
+      { name: "Band Chest Flyes", reps: 15, sets: 3 },
+    ],
+    core: [
+      { name: "Plank", duration: "45 seconds", sets: 3 },
+      { name: "Mountain Climbers", reps: 20, sets: 3 },
+      { name: "Russian Twists", reps: 20, sets: 3 },
+    ],
+    shoulders: [
+      { name: "Pike Push-ups", reps: 10, sets: 3 },
+      { name: "Band Lateral Raises", reps: 15, sets: 3 },
+      { name: "Front-to-Lateral Raises", reps: 12, sets: 3 },
+    ],
+    cardio: [
+      { name: "High Knees", duration: "45 seconds" },
+      { name: "Jumping Jacks", duration: "1 minute" },
+      { name: "Mountain Climbers", duration: "45 seconds" },
+    ],
   },
-  hard: {
+  advanced: {
     arms: [
       { name: "Plyometric Push-ups", reps: 12, sets: 4 },
       { name: "Pike Push-ups", reps: 10, sets: 4 },
@@ -59,7 +83,31 @@ export const exercises = {
       { name: "Jump Lunges", reps: 20, sets: 4 },
       { name: "Box Jumps", reps: 12, sets: 4 },
     ],
-    // ... add more exercises for other body parts
+    back: [
+      { name: "Pull-ups", reps: 8, sets: 4 },
+      { name: "Inverted Rows", reps: 12, sets: 4 },
+      { name: "Renegade Rows", reps: 10, sets: 4, perSide: true },
+    ],
+    chest: [
+      { name: "Decline Push-ups", reps: 15, sets: 4 },
+      { name: "Plyometric Push-ups", reps: 12, sets: 4 },
+      { name: "Diamond Push-ups", reps: 15, sets: 4 },
+    ],
+    core: [
+      { name: "Plank with Shoulder Taps", duration: "60 seconds", sets: 3 },
+      { name: "V-Ups", reps: 15, sets: 4 },
+      { name: "Dragon Flags", reps: 8, sets: 3 },
+    ],
+    shoulders: [
+      { name: "Handstand Push-ups", reps: 8, sets: 3 },
+      { name: "Pike Push-ups", reps: 12, sets: 4 },
+      { name: "Military Press with Resistance Band", reps: 15, sets: 4 },
+    ],
+    cardio: [
+      { name: "Burpees", duration: "1 minute" },
+      { name: "Jump Rope", duration: "2 minutes" },
+      { name: "High-Intensity Mountain Climbers", duration: "1 minute" },
+    ],
   },
 };
 
