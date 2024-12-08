@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaSun, FaMoon } from 'react-icons/fa';
+import { useTheme } from '../context/ThemeContext';
 import logo from '../../assets/logo.png';
 
 const Header = ({ username }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const { darkMode, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,7 +32,7 @@ const Header = ({ username }) => {
   }, []);
 
   return (
-    <header className="bg-[#242938] text-white shadow-lg">
+    <header className="bg-[#242938] dark:bg-gray-900 text-white shadow-lg transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col">
           {/* Top Bar with Logo and Navigation */}
@@ -43,6 +46,12 @@ const Header = ({ username }) => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
               <Link to="/profile" className="text-gray-300 hover:text-white">Profile</Link>
+              <button
+                onClick={toggleTheme}
+                className="text-gray-300 hover:text-white p-2 rounded-lg transition duration-200"
+              >
+                {darkMode ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+              </button>
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200"
@@ -68,21 +77,30 @@ const Header = ({ username }) => {
 
               {/* Floating Dropdown Menu */}
               {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[#242938] ring-1 ring-black ring-opacity-5 z-50">
+                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[#242938] dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
                   <div className="py-1">
                     <Link 
                       to="/profile" 
-                      className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#1a1f2e]"
+                      className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#1a1f2e] dark:hover:bg-gray-700"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Profile
                     </Link>
                     <button
                       onClick={() => {
+                        toggleTheme();
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-[#1a1f2e] dark:hover:bg-gray-700"
+                    >
+                      Appearance: {darkMode ? 'Dark Mode' : 'Light Mode'}
+                    </button>
+                    <button
+                      onClick={() => {
                         handleLogout();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-[#1a1f2e]"
+                      className="w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-[#1a1f2e] dark:hover:bg-gray-700"
                     >
                       Logout
                     </button>
