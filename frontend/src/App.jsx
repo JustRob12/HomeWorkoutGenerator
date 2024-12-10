@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import Workouts from './components/Workouts';
 import History from './components/History';
+import OnboardingScreen from './components/Onboarding';
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -43,7 +44,8 @@ function App() {
             />
             <Route path="/workouts" element={<Workouts />} />
             <Route path="/history" element={<History />} />
-            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/onboarding" element={<OnboardingScreen />} />
+            <Route path="/" element={<Navigate to="/onboarding" />} />
           </Routes>
         </div>
       </Router>
