@@ -12,6 +12,8 @@ const workoutSchema = new mongoose.Schema({
         sets: Number,
         duration: String,
         perSide: Boolean,
+        description: { type: String, default: '' },
+        benefits: { type: String, default: '' }
       },
     ],
   },
@@ -20,9 +22,15 @@ const workoutSchema = new mongoose.Schema({
     enum: ['inactive', 'active', 'completed'],
     default: 'inactive'
   },
+  pulseRates: {
+    initial: { type: Number, min: 1, max: 400 },
+    final: { type: Number, min: 1, max: 400 },
+    difference: Number,
+    percentageChange: Number
+  },
   createdAt: { type: Date, default: Date.now },
   activatedAt: Date,
   completedAt: Date
 });
 
-export default mongoose.model('Workout', workoutSchema); 
+export default mongoose.model('Workout', workoutSchema);

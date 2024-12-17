@@ -72,7 +72,7 @@ const History = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200 pb-16">
         <div className="text-gray-600 dark:text-gray-400">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p>Loading your workout history...</p>
@@ -82,10 +82,10 @@ const History = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200 pb-16">
       <Header username={username} />
       
-      <main className="container mx-auto px-4 py-4 sm:py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-4 max-w-7xl">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
             <div className="p-3 bg-blue-500 dark:bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center">

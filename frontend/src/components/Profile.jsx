@@ -3,6 +3,7 @@ import { FaCamera, FaArrowLeft, FaUser, FaEnvelope, FaMedal, FaCalendarAlt, FaDu
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import BottomNavigation from './BottomNavigation';
+import PulseRateHistory from './PulseRateHistory';
 
 const Profile = () => {
   const [image, setImage] = useState(null);
@@ -148,10 +149,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200 pb-16">
       <Header username={username} />
       
-      <main className="container mx-auto px-4 py-4 sm:py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-4 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* User Info Card */}
           <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
@@ -187,95 +188,56 @@ const Profile = () => {
                   {loading ? 'Saving...' : 'Save Profile Picture'}
                 </button>
               )}
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-4 mb-2">{username}</h1>
-              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Member since {joinDate}</p>
-            </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-4">{username}</h1>
 
-            <div className="mt-6 space-y-4">
-              <div className="flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center mb-2 sm:mb-0">
-                  <FaFire className="text-orange-500 dark:text-orange-400 mr-2" />
-                  <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">Current Streak</span>
+              <div className="mt-6 space-y-4">
+                <div className="flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div className="flex items-center mb-2 sm:mb-0">
+                    <FaFire className="text-orange-500 dark:text-orange-400 mr-2" />
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">Current Streak</span>
+                  </div>
+                  <span className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{streak} days</span>
                 </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{streak} days</span>
+
+                <div className="flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div className="flex items-center mb-2 sm:mb-0">
+                    <FaDumbbell className="text-blue-500 dark:text-blue-400 mr-2" />
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">Total Workouts</span>
+                  </div>
+                  <span className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{totalWorkouts}</span>
+                </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center mb-2 sm:mb-0">
-                  <FaDumbbell className="text-blue-500 dark:text-blue-400 mr-2" />
-                  <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">Total Workouts</span>
-                </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{totalWorkouts}</span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center mb-2 sm:mb-0">
-                  <FaClock className="text-green-500 dark:text-green-400 mr-2" />
-                  <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">Total Time</span>
-                </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{totalTime}</span>
-              </div>
             </div>
 
           </div>
 
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-4">Recent Activity</h2>
-              
-              <div className="space-y-4">
-                {workouts.length > 0 ? (
-                  workouts.slice(0, 5).map((workout, index) => (
-                    <div 
-                      key={index}
-                      className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 transition-all duration-200"
-                    >
-                      <div className="flex flex-col sm:flex-row justify-between mb-3">
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 sm:mb-0">{workout.workout.name}</h3>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                          <span className="flex items-center">
-                            <FaCalendarAlt className="mr-1 text-blue-500 dark:text-blue-400" />
-                            {new Date(workout.completedAt).toLocaleDateString()}
-                          </span>
-                          <span className="flex items-center">
-                            <FaClock className="mr-1 text-blue-500 dark:text-blue-400" />
-                            {workout.workout.duration}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {workout.workout.exercises.map((exercise, exerciseIndex) => (
-                          <div 
-                            key={exerciseIndex}
-                            className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600"
-                          >
-                            <h4 className="font-medium text-gray-800 dark:text-white text-sm mb-2">{exercise.name}</h4>
-                            <div className="text-xs space-x-2 text-gray-600 dark:text-gray-400">
-                              {exercise.reps && <span>{exercise.reps} reps</span>}
-                              {exercise.sets && <span>{exercise.sets} sets</span>}
-                              {exercise.duration && <span>{exercise.duration}</span>}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-3 flex justify-end">
-                        <button
-                          onClick={() => handleDeleteWorkout(workout._id)}
-                          className="text-sm px-3 py-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center"
-                        >
-                          <FaTrash className="mr-1" /> Remove
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 dark:text-gray-400 text-center">No workouts completed yet</p>
-                )}
+          {/* Workout History and Stats */}
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg flex items-center">
+                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full mr-4">
+                  <FaMedal className="text-blue-500 dark:text-blue-400 text-xl" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Workout Streak</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">{streak} days</div>
+                </div>
+              </div>
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg flex items-center">
+                <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full mr-4">
+                  <FaDumbbell className="text-green-500 dark:text-green-400 text-xl" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Workouts</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">{totalWorkouts}</div>
+                </div>
               </div>
             </div>
+
+            {/* Pulse Rate History */}
+            <PulseRateHistory username={username} />
           </div>
         </div>
       </main>

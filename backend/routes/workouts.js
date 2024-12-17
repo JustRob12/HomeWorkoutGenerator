@@ -30,12 +30,20 @@ router.get('/:username', async (req, res) => {
 router.patch('/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, normalPulseRate, recentPulseRate, pulseDifference, pulseIncreasePercentage } = req.body;
     
     const updateData = {
       status,
-      ...(status === 'active' ? { activatedAt: new Date() } : {}),
-      ...(status === 'completed' ? { completedAt: new Date() } : {})
+      ...(status === 'active' ? { 
+        activatedAt: new Date(),
+        'pulseRates.initial': normalPulseRate 
+      } : {}),
+      ...(status === 'completed' ? { 
+        completedAt: new Date(),
+        'pulseRates.final': recentPulseRate,
+        'pulseRates.difference': pulseDifference,
+        'pulseRates.percentageChange': pulseIncreasePercentage
+      } : {})
     };
 
     const workout = await Workout.findByIdAndUpdate(
@@ -66,6 +74,25 @@ router.get('/:username/completed', async (req, res) => {
     res.status(200).json(completedWorkouts);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve workout history' });
+  }
+});
+
+// Get pulse rate history for a user
+router.get('/:username/pulse-history', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const pulseHistory = await Workout.find({ 
+      username, 
+      status: 'completed',
+      'pulseRates.initial': { $exists: true },
+      'pulseRates.final': { $exists: true }
+    })
+    .select('pulseRates completedAt workout.name')
+    .sort({ completedAt: -1 });
+    
+    res.status(200).json(pulseHistory);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve pulse rate history' });
   }
 });
 

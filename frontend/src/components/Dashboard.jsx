@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import { getRandomWorkout } from '../data/exercises';
 import BottomNavigation from './BottomNavigation';
-import { FaDumbbell, FaUser, FaWeight, FaRuler, FaTimes, FaSave } from 'react-icons/fa';
+import { FaDumbbell, FaUser, FaWeight, FaRuler, FaTimes, FaSave, FaRunning } from 'react-icons/fa';
 import { BiBody } from 'react-icons/bi';
+import { GiMuscleUp, GiLeg, GiBiceps, GiChestArmor, GiAbdominalArmor, GiShoulderArmor } from 'react-icons/gi';
 import Alert from './Alert';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -31,15 +32,16 @@ const Dashboard = () => {
     cardio: false
   });
   const [alert, setAlert] = useState({ type: '', message: '', isVisible: false });
+  const [showSaveSuccessModal, setShowSaveSuccessModal] = useState(false);
 
   const bodyPartOptions = [
-    { id: 'arms', label: 'Arms' },
-    { id: 'legs', label: 'Legs' },
-    { id: 'back', label: 'Back' },
-    { id: 'chest', label: 'Chest' },
-    { id: 'core', label: 'Core' },
-    { id: 'shoulders', label: 'Shoulders' },
-    { id: 'cardio', label: 'Cardio' }
+    { id: 'arms', label: 'Arms', icon: <GiBiceps className="w-6 h-6" /> },
+    { id: 'legs', label: 'Legs', icon: <GiLeg className="w-6 h-6" /> },
+    { id: 'back', label: 'Back', icon: <GiMuscleUp className="w-6 h-6" /> },
+    { id: 'chest', label: 'Chest', icon: <GiChestArmor className="w-6 h-6" /> },
+    { id: 'core', label: 'Core', icon: <GiAbdominalArmor className="w-6 h-6" /> },
+    { id: 'shoulders', label: 'Shoulders', icon: <GiShoulderArmor className="w-6 h-6" /> },
+    { id: 'cardio', label: 'Cardio', icon: <FaRunning className="w-6 h-6" /> }
   ];
 
   useEffect(() => {
@@ -125,6 +127,20 @@ const Dashboard = () => {
 
     setIsSaving(true);
     try {
+      // Ensure all exercise properties are included
+      const workoutToSave = {
+        ...workout,
+        exercises: workout.exercises.map(exercise => ({
+          name: exercise.name,
+          sets: exercise.sets,
+          reps: exercise.reps,
+          duration: exercise.duration,
+          perSide: exercise.perSide,
+          description: exercise.description,
+          benefits: exercise.benefits
+        }))
+      };
+
       const response = await fetch(`${API_URL}/api/workouts`, {
         method: 'POST',
         headers: {
@@ -132,19 +148,18 @@ const Dashboard = () => {
         },
         body: JSON.stringify({
           username,
-          workout,
+          workout: workoutToSave,
           status: 'inactive'
         }),
       });
 
       if (response.ok) {
-        setAlert({
-          type: 'success',
-          message: 'Workout saved successfully!',
-          isVisible: true
-        });
+        setShowSaveSuccessModal(true);
         setWorkout(null);
         setShowModal(false);
+        setTimeout(() => {
+          setShowSaveSuccessModal(false);
+        }, 2000);
       } else {
         setAlert({
           type: 'error',
@@ -168,7 +183,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200 pb-16">
       <Header username={username} />
       <Alert
         type={alert.type}
@@ -177,7 +192,7 @@ const Dashboard = () => {
         onClose={() => setAlert(prev => ({ ...prev, isVisible: false }))}
       />
       
-      <main className="container mx-auto px-4 py-4 sm:py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-4 max-w-7xl">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
             <div className="p-3 bg-blue-500 dark:bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center">
@@ -257,38 +272,58 @@ const Dashboard = () => {
           {/* Target Areas Section */}
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
             <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 dark:text-white">Target Areas</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-              {bodyPartOptions.map(({ id, label }) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 mb-6">
+              {bodyPartOptions.map((option) => (
                 <button
-                  key={id}
-                  onClick={() => handleTargetAreaChange(id)}
-                  className={`p-3 sm:p-4 rounded-lg flex items-center justify-center transition-colors text-sm sm:text-base ${
-                    targetAreas[id]
-                      ? 'bg-blue-500 dark:bg-blue-600 text-white'
-                      : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
-                  }`}
+                  key={option.id}
+                  onClick={() => handleTargetAreaChange(option.id)}
+                  className={`flex flex-col items-center justify-center p-4 rounded-lg ${
+                    targetAreas[option.id]
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200'
+                  } hover:bg-blue-400 dark:hover:bg-blue-600 transition-colors duration-200 shadow-md`}
                 >
-                  {label}
+                  <div className="mb-2">
+                    {option.icon}
+                  </div>
+                  <span className="text-sm font-medium">{option.label}</span>
                 </button>
               ))}
             </div>
+            <button
+              onClick={handleGenerateExercise}
+              className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center text-base shadow-lg"
+            >
+              <FaDumbbell className="mr-2" /> Generate Workout
+            </button>
           </div>
         </div>
       </main>
 
-      {/* Fixed Bottom Button Container */}
-      <div className="fixed bottom-16 left-0 right-0 p-4 bg-gradient-to-t from-gray-100 dark:from-gray-900">
-        <div className="container mx-auto max-w-7xl">
-          <button
-            onClick={handleGenerateExercise}
-            className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center text-base shadow-lg"
-          >
-            <FaDumbbell className="mr-2" /> Generate Workout
-          </button>
-        </div>
-      </div>
-
       <BottomNavigation />
+
+      {/* Save Success Modal */}
+      {showSaveSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 transform transition-all duration-300 scale-100 max-w-sm w-full">
+            <div className="text-center">
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900 mb-4">
+                <svg className="h-10 w-10 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Workout Saved!</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">Your workout has been successfully saved to your collection.</p>
+              <button
+                onClick={() => setShowSaveSuccessModal(false)}
+                className="w-full bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Workout Modal */}
       {showModal && workout && (
