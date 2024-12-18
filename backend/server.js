@@ -22,7 +22,8 @@ const corsOptions = {
     
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://homeworkoutgenerator-1.onrender.com'
+      'https://homeworkoutgenerator-1.onrender.com',
+      'https://home-workout-generator-yncn.vercel.app'
     ];
     
     // Allow any subdomain of vercel.app
@@ -32,7 +33,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   optionsSuccessStatus: 200
