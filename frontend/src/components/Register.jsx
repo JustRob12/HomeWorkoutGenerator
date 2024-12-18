@@ -9,6 +9,7 @@ const Register = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,6 +21,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: 'POST',
@@ -38,6 +40,8 @@ const Register = () => {
       }
     } catch (err) {
       setError('An error occurred during registration');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,7 +64,8 @@ const Register = () => {
               type="text"
               name="username"
               required
-              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
@@ -72,7 +77,8 @@ const Register = () => {
               type="email"
               name="email"
               required
-              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
@@ -84,7 +90,8 @@ const Register = () => {
               type="password"
               name="password"
               required
-              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-lg bg-[#1a1f2e] text-white border border-gray-700 focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
@@ -93,29 +100,24 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative"
           >
-            Sign Up
+            {isLoading ? (
+              <>
+                <span className="opacity-0">Sign Up</span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              </>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </form>
 
-        <div className="mt-4 text-center text-gray-400">or</div>
-
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <button className="flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg bg-white hover:bg-gray-50 transition duration-200">
-            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-2" />
-            Google
-          </button>
-          <button className="flex items-center justify-center px-4 py-2 border border-gray-700 rounded-lg bg-[#1877f2] text-white hover:bg-[#1865d3] transition duration-200">
-            <svg className="w-5 h-5 mr-2 fill-current" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            Facebook
-          </button>
-        </div>
-
         <div className="mt-6 text-center text-gray-400">
-          Already have an account? <Link to="/login" className="text-blue-500 hover:text-blue-600">Sign In</Link>
+          Already have an account? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link>
         </div>
       </div>
     </div>
