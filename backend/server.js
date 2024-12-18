@@ -19,7 +19,8 @@ const corsOptions = {
   origin: [
     'http://localhost:5173',
     'https://home-workout-generator-sj6g.vercel.app',
-    'https://home-workout-generator.vercel.app'
+    'https://home-workout-generator.vercel.app',
+    'https://homeworkoutgenerator-1.onrender.com'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
