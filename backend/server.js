@@ -16,12 +16,22 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'https://home-workout-generator-sj6g.vercel.app',
-    'https://home-workout-generator.vercel.app',
-    'https://homeworkoutgenerator-1.onrender.com'
-  ],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://homeworkoutgenerator-1.onrender.com'
+    ];
+    
+    // Allow any subdomain of vercel.app
+    if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
