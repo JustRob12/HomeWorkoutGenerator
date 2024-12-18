@@ -182,6 +182,60 @@ const History = () => {
                       ))}
                     </div>
                   )}
+                  {workout.pulseRates && (
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">Heart Rate Change</h3>
+                          <div className="flex items-center">
+                            <span className={`text-sm font-medium ${
+                              workout.pulseRates.percentageChange > 100 
+                                ? 'text-orange-500 dark:text-orange-400'
+                                : 'text-green-500 dark:text-green-400'
+                            }`}>
+                              {workout.pulseRates.difference > 0 ? '+' : ''}{workout.pulseRates.difference} BPM
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                          <div>
+                            <p>Initial</p>
+                            <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                              {workout.pulseRates.initial} BPM
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p>Final</p>
+                            <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                              {workout.pulseRates.final} BPM
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Intensity Level</h3>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full rounded-full ${
+                                  workout.pulseRates.percentageChange <= 50 ? 'bg-green-500' :
+                                  workout.pulseRates.percentageChange <= 100 ? 'bg-yellow-500' :
+                                  'bg-orange-500'
+                                }`}
+                                style={{ width: `${Math.min(100, workout.pulseRates.percentageChange)}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                          <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+                            {workout.pulseRates.percentageChange <= 50 ? 'Light' :
+                             workout.pulseRates.percentageChange <= 100 ? 'Moderate' :
+                             'Intense'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
