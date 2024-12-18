@@ -3,10 +3,11 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: './',
+  base: '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    emptyOutDir: true,
     sourcemap: false,
     rollupOptions: {
       output: {
